@@ -1,0 +1,17 @@
+{
+  "name": "lending-site",
+  "version": "1.0.0",
+  "description": "Crypto lending MVP with Node.js and Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "dev.x",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1"
+  }
+}

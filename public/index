@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>پلتفرم وام‌دهی با وثیقه</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- اضافه کردن TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- نوار بالای سایت -->
+  <nav class="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">💰 پلتفرم وام‌دهی</h1>
+    <div>
+      <button id="borrowerTab" class="px-4 py-2 rounded bg-teal-500 hover:bg-teal-600 mr-2" onclick="showSection('borrower')">وام‌گیرنده</button>
+      <button id="lenderTab" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700" onclick="showSection('lender')">وام‌دهنده</button>
+    </div>
+  </nav>
+
+  <div class="container mx-auto mt-6 p-4">
+    <!-- بخش وام‌گیرنده -->
+    <div id="borrowerSection">
+      <div class="bg-white shadow-md rounded p-6 mb-6">
+        <h2 class="text-lg font-semibold mb-4 text-teal-600">ثبت سفارش وام‌گیری</h2>
+        <label class="block mb-2">آدرس کیف پول</label>
+        <input id="user" class="w-full border rounded p-2 mb-3" placeholder="مثلاً آدرس TON یا USDT">
+        <label class="block mb-2">توکن وثیقه</label>
+        <input id="collateralToken" class="w-full border rounded p-2 mb-3" value="TON">
+        <label class="block mb-2">مقدار وثیقه</label>
+        <input id="collateralAmount" type="number" class="w-full border rounded p-2 mb-3">
+        <label class="block mb-2">توکن وام</label>
+        <input id="debtToken" class="w-full border rounded p-2 mb-3" value="USDT">
+        <label class="block mb-2">مقدار وام</label>
+        <input id="debtAmount" type="number" class="w-full border rounded p-2 mb-3">
+        <label class="block mb-2">مدت (روز)</label>
+        <input id="termDays" type="number" class="w-full border rounded p-2 mb-3" value="30">
+        <button class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600" onclick="createOrder()">ثبت سفارش</button>
+        <pre id="createOrderResult" class="bg-gray-100 p-3 mt-3 rounded"></pre>
+      </div>
+
+      <div class="bg-white shadow-md rounded p-6">
+        <h2 class="text-lg font-semibold mb-4 text-blue-600">سفارش‌های من</h2>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-3" onclick="loadOrders()">بارگذاری سفارش‌ها</button>
+        <pre id="ordersList" class="bg-gray-100 p-3 rounded"></pre>
+      </div>
+    </div>
+
+    <!-- بخش وام‌دهنده -->
+    <div id="lenderSection" class="hidden">
+      <div class="bg-white shadow-md rounded p-6 mb-6">
+        <h2 class="text-lg font-semibold mb-4 text-yellow-600">لیست سفارش‌ها</h2>
+        <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mb-3" onclick="loadOrders()">نمایش سفارش‌ها</button>
+        <pre id="ordersListLender" class="bg-gray-100 p-3 rounded"></pre>
+      </div>
+
+      <div class="bg-white shadow-md rounded p-6">
+        <h2 class="text-lg font-semibold mb-4 text-green-600">ثبت پیشنهاد وام‌دهنده</h2>
+        <label class="block mb-2">شناسه سفارش</label>
+        <input id="offerOrderId" type="number" class="w-full border rounded p-2 mb-3">
+        <label class="block mb-2">آدرس کیف پول وام‌دهنده</label>
+        <input id="lender" class="w-full border rounded p-2 mb-3">
+        <label class="block mb-2">APR (درصد سالانه)</label>
+        <input id="apr" type="number" class="w-full border rounded p-2 mb-3" value="12">
+        <label class="block mb-2">کارمزد ثابت</label>
+        <input id="fixedFee" type="number" class="w-full border rounded p-2 mb-3" value="0">
+        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="createOffer()">ثبت پیشنهاد</button>
+        <pre id="offerResult" class="bg-gray-100 p-3 mt-3 rounded"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function showSection(section) {
+      document.getElementById('borrowerSection').classList.add('hidden');
+      document.getElementById('lenderSection').classList.add('hidden');
+      document.getElementById(section + 'Section').classList.remove('hidden');
+      document.getElementById('borrowerTab').classList.remove('bg-teal-500');
+      document.getElementById('lenderTab').classList.remove('bg-teal-500');
+      if(section === 'borrower') {
+        document.getElementById('borrowerTab').classList.add('bg-teal-500');
+      } else {
+        document.getElementById('lenderTab').classList.add('bg-teal-500');
+      }
+    }
+  </script>
+</body>
+</html>
