@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <title>پنل مدیریت</title>
+</head>
+<body>
+  <h1>ورود مدیر</h1>
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="ایمیل"><br>
+    <input type="password" id="password" placeholder="رمز عبور"><br>
+    <button type="submit">ورود</button>
+  </form>
+
+  <h2>تنظیم کارمزد</h2>
+  <form id="feeForm">
+    <select id="mode">
+      <option value="percent">درصد</option>
+      <option value="fixed">مبلغ ثابت</option>
+    </select>
+    <input type="number" id="value" placeholder="مثلاً 2 برای 2%"><br>
+    <button type="submit">ذخیره</button>
+  </form>
+
+  <pre id="msg"></pre>
+
+<script>
+let token = null;
+
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const r = await fetch('/api/admin/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ email, password })
+  });
+  const d = await r.json();
+  if (d.token) {
+    token = d.token;
+    document.getElementById('msg').textContent = '✅ ورود موفق';
+  } else {
+    document.getElementById('msg').textContent = JSON.stringify(d,null,2);
+  }
+});
+
+document.getElementById('feeForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!token) return alert('ابتدا وارد شوید');
+  const mode = document.getElementById('mode').value;
+  const value = Number(document.getElementById('value').value);
+  const r = await fetch('/api/admin/fee', {
+    method: 'PUT',
+    headers: {
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + token
+    },
+    body: JSON.stringify({ mode, value })
+  });
+  const d = await r.json();
+  document.getElementById('msg').textContent = JSON.stringify(d,null,2);
+});
+</script>
+</body>
+</html>

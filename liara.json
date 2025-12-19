@@ -1,5 +1,6 @@
 {
   "platform": "node",
   "port": 3000,
-  "app": "lending-site"
+  "build": "echo Skip build",
+  "start": "node server.js"
 }
