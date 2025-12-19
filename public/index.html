@@ -124,6 +124,33 @@ body.dark .table td {
   border: 1px solid #b30000;
   padding: 8px;
 }
+  .error-field {
+    border: 2px solid red !important;
+    background-color: #ffe0e0;
+  }
+  .error-text {
+    color: #d32f2f;
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+input.error-field,
+select.error-field,
+textarea.error-field {
+  border: 2px solid #d32f2f !important;
+  background-color: #fff0f0 !important;
+  color: #000 !important; /* متن مشکی برای خوانایی بالا */
+}
+
+/* حالت تاریک */
+@media (prefers-color-scheme: dark) {
+  input.error-field,
+  select.error-field,
+  textarea.error-field {
+    border: 2px solid #ff6b6b !important;
+    background-color: #3a0000 !important;
+    color: #fff !important; /* متن سفید برای تضاد با پس‌زمینه تیره */
+  }
+}
   </style>
 </head>
 
@@ -397,6 +424,209 @@ body.dark .table td {
 
       document.getElementById(resultId).innerHTML =
         `<div class="alert alert-warning">لطفاً همه فیلدهای ضروری را کامل کنید ❗</div>`;
+      return;
+    }
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('Server error');
+      const result = await res.json();
+      document.getElementById(resultId).innerHTML =
+        `<div class="alert alert-success">درخواست ثبت شد ✅</div>`;
+      form.reset();
+    } catch (err) {
+      document.getElementById(resultId).innerHTML =
+        `<div class="alert alert-danger">خطا در ثبت درخواست ❌</div>`;
+    }
+  }
+  // الگوها و محدودیت‌ها
+  const patterns = {
+    walletEth: /^0x[a-fA-F0-9]{40}$/, // آدرس اتریوم
+    name: /^[\u0600-\u06FFa-zA-Z\s]{2,50}$/, // فارسی/لاتین + فاصله
+  };
+
+  const limits = {
+    amount: { min: 1, max: 1000000 },
+    collateralValue: { min: 1, max: 10000000 },
+    duration: { min: 1, max: 60 },
+    interest: { min: 0, max: 100 } // اگر در فرم وام‌دهنده داری
+  };
+
+  const allowedCollateral = ['BTC', 'ETH', 'USDT'];
+
+  function setError(input, message) {
+    input.classList.add('error-field');
+    const helpId = input.getAttribute('aria-describedby');
+    if (helpId) {
+      const helpEl = document.getElementById(helpId);
+      if (helpEl) {
+        helpEl.textContent = message;
+        helpEl.classList.add('error-text');
+      }
+    }
+  }
+
+  function clearError(input) {
+    input.classList.remove('error-field');
+    const helpId = input.getAttribute('aria-describedby');
+    if (helpId) {
+      const helpEl = document.getElementById(helpId);
+      if (helpEl) {
+        helpEl.textContent = '';
+        helpEl.classList.remove('error-text');
+      }
+    }
+  }
+
+  function validateBorrower(data, form) {
+    let ok = true;
+
+    // name
+    {
+      const input = form.querySelector('[name="name"]');
+      clearError(input);
+      if (!data.name || !patterns.name.test(data.name.trim())) {
+        setError(input, 'نام باید فقط شامل حروف فارسی/لاتین و فاصله باشد (۲ تا ۵۰ کاراکتر).');
+        ok = false;
+      }
+    }
+
+    // wallet (Ethereum)
+    {
+      const input = form.querySelector('[name="wallet"]');
+      clearError(input);
+      if (!data.wallet || !patterns.walletEth.test(data.wallet.trim())) {
+        setError(input, 'آدرس کیف پول معتبر اتریوم وارد کنید (0x + 40 کاراکتر هگز).');
+        ok = false;
+      }
+    }
+
+    // amount
+    {
+      const input = form.querySelector('[name="amount"]');
+      clearError(input);
+      const v = Number(data.amount);
+      if (!Number.isFinite(v) || v < limits.amount.min || v > limits.amount.max) {
+        setError(input, `مبلغ باید عددی بین ${limits.amount.min} تا ${limits.amount.max} باشد.`);
+        ok = false;
+      }
+    }
+
+    // collateralType
+    {
+      const input = form.querySelector('[name="collateralType"]');
+      clearError(input);
+      const t = (data.collateralType || '').trim().toUpperCase();
+      if (!allowedCollateral.includes(t)) {
+        setError(input, `نوع وثیقه باید یکی از این‌ها باشد: ${allowedCollateral.join(' / ')}.`);
+        ok = false;
+      }
+    }
+
+    // collateralValue
+    {
+      const input = form.querySelector('[name="collateralValue"]');
+      clearError(input);
+      const v = Number(data.collateralValue);
+      if (!Number.isFinite(v) || v < limits.collateralValue.min || v > limits.collateralValue.max) {
+        setError(input, `ارزش وثیقه باید عددی بین ${limits.collateralValue.min} تا ${limits.collateralValue.max} باشد.`);
+        ok = false;
+      }
+    }
+
+    // duration
+    {
+      const input = form.querySelector('[name="duration"]');
+      clearError(input);
+      const v = Number(data.duration);
+      if (!Number.isInteger(v) || v < limits.duration.min || v > limits.duration.max) {
+        setError(input, `مدت وام باید عدد صحیح بین ${limits.duration.min} تا ${limits.duration.max} ماه باشد.`);
+        ok = false;
+      }
+    }
+
+    return ok;
+  }
+
+  function validateLender(data, form) {
+    let ok = true;
+
+    // name
+    {
+      const input = form.querySelector('[name="name"]');
+      clearError(input);
+      if (!data.name || !patterns.name.test(data.name.trim())) {
+        setError(input, 'نام باید فقط شامل حروف فارسی/لاتین و فاصله باشد (۲ تا ۵۰ کاراکتر).');
+        ok = false;
+      }
+    }
+
+    // wallet (Ethereum)
+    {
+      const input = form.querySelector('[name="wallet"]');
+      clearError(input);
+      if (!data.wallet || !patterns.walletEth.test(data.wallet.trim())) {
+        setError(input, 'آدرس کیف پول معتبر اتریوم وارد کنید (0x + 40 کاراکتر هگز).');
+        ok = false;
+      }
+    }
+
+    // amount
+    {
+      const input = form.querySelector('[name="amount"]');
+      clearError(input);
+      const v = Number(data.amount);
+      if (!Number.isFinite(v) || v < limits.amount.min || v > limits.amount.max) {
+        setError(input, `مبلغ باید عددی بین ${limits.amount.min} تا ${limits.amount.max} باشد.`);
+        ok = false;
+      }
+    }
+
+    // duration
+    {
+      const input = form.querySelector('[name="duration"]');
+      clearError(input);
+      const v = Number(data.duration);
+      if (!Number.isInteger(v) || v < limits.duration.min || v > limits.duration.max) {
+        setError(input, `مدت باید عدد صحیح بین ${limits.duration.min} تا ${limits.duration.max} ماه باشد.`);
+        ok = false;
+      }
+    }
+
+    // interest (درصد)
+    {
+      const input = form.querySelector('[name="interest"]');
+      clearError(input);
+      const v = Number(data.interest);
+      if (!Number.isFinite(v) || v < limits.interest.min || v > limits.interest.max) {
+        setError(input, `نرخ بهره باید بین ${limits.interest.min}% تا ${limits.interest.max}% باشد.`);
+        ok = false;
+      }
+    }
+
+    return ok;
+  }
+
+  async function submitForm(formId, apiUrl, resultId) {
+    const form = document.getElementById(formId);
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // پاک کردن خطاهای قبلی همه فیلدها
+    form.querySelectorAll('input, select, textarea').forEach(clearError);
+
+    // اعتبارسنجی اختصاصی
+    const valid = formId === 'borrowerForm'
+      ? validateBorrower(data, form)
+      : validateLender(data, form);
+
+    if (!valid) {
+      document.getElementById(resultId).innerHTML =
+        `<div class="alert alert-warning">لطفاً خطاهای مشخص‌شده را برطرف کنید و دوباره تلاش کنید ❗</div>`;
       return;
     }
 
