@@ -103,6 +103,27 @@ body.dark .form-label {
     /* Device-specific tweaks */
     body.android .btn-warning { font-size: 16px; }
     body.desktop .btn-warning { font-size: 14px; }
+/* خط 51 */
+.error-field {
+  border: 2px solid red !important;
+  background-color: #ffe0e0;
+}
+/* حالت تاریک برای جدول سفارشات */
+body.dark .table {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  border: 2px solid #b30000;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
+}
+
+body.dark .table th,
+body.dark .table td {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  border: 1px solid #b30000;
+  padding: 8px;
+}
   </style>
 </head>
 
@@ -348,6 +369,53 @@ body.dark .form-label {
     // Init
     detectDevice();
     bindThemeControls();
+  async function submitForm(formId, apiUrl, resultId) {
+    const form = document.getElementById(formId);
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // پاک کردن خطاهای قبلی
+    form.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+
+    // اعتبارسنجی جداگانه برای هر فرم
+    let requiredFields = [];
+
+    if (formId === 'borrowerForm') {
+      requiredFields = ['name', 'wallet', 'amount', 'collateralType', 'collateralValue', 'duration'];
+    } else if (formId === 'lenderForm') {
+      requiredFields = ['name', 'wallet', 'amount', 'duration', 'interest'];
+    }
+
+    const missing = requiredFields.filter(field => !data[field] || data[field].trim() === '');
+
+    if (missing.length > 0) {
+      // رنگ قرمز برای فیلدهای خالی
+      missing.forEach(field => {
+        const input = form.querySelector(`[name="${field}"]`);
+        if (input) input.classList.add('error-field');
+      });
+
+      document.getElementById(resultId).innerHTML =
+        `<div class="alert alert-warning">لطفاً همه فیلدهای ضروری را کامل کنید ❗</div>`;
+      return;
+    }
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('Server error');
+      const result = await res.json();
+      document.getElementById(resultId).innerHTML =
+        `<div class="alert alert-success">درخواست ثبت شد ✅</div>`;
+      form.reset();
+    } catch (err) {
+      document.getElementById(resultId).innerHTML =
+        `<div class="alert alert-danger">خطا در ثبت درخواست ❌</div>`;
+    }
+  }
   </script>
 </body>
 </html>

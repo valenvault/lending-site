@@ -161,5 +161,30 @@
     "feeAmount": "0.00",
     "total": "0.00",
     "date": "2025-12-19T15:21:37.217Z"
+  },
+  {
+    "id": 14,
+    "type": "borrower",
+    "name": "",
+    "wallet": "",
+    "amount": "",
+    "collateralType": "",
+    "collateralValue": "",
+    "duration": "",
+    "feeAmount": "0.00",
+    "total": "0.00",
+    "date": "2025-12-19T15:41:30.145Z"
+  },
+  {
+    "id": 15,
+    "type": "lender",
+    "name": "علی",
+    "wallet": "Kvgvbnvchjvvbb",
+    "amount": "100",
+    "duration": "12",
+    "interest": "10",
+    "feeAmount": "2.00",
+    "total": "112.00",
+    "date": "2025-12-19T18:46:04.334Z"
   }
 ]
