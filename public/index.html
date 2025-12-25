@@ -1,204 +1,65 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>سامانه وام‌دهی</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
 
   <style>
-    /* Base */
-    :root {
-      --bg: #f8f9fa;
-      --fg: #222;
-      --card-bg: #fff;
-      --card-border: #ddd;
-      --input-bg: #fff;
-      --input-fg: #222;
-      --input-border: #ced4da;
-      --placeholder: #888;
-      --accent: #0d6efd;
-    }
-    body {
-      background-color: var(--bg);
-      color: var(--fg);
-      font-family: Vazir, sans-serif;
-      transition: background-color 0.25s ease, color 0.25s ease;
-    }
-    /* حالت تاریک برای label */
-body.dark label {
-  color: #f0f0f0;
-}
+    body { font-family: Vazir, sans-serif; background-color: #f8f9fa; color: #222; }
+    body.dark { background-color: #000; color: #f0f0f0; }
 
-/* حالت تاریک برای placeholder */
-body.dark .form-control::placeholder {
-  color: #aaa;
-}
-body.dark .form-label {
-  color: #f0f0f0;
-}
-    .card {
-      background-color: var(--card-bg);
-      border-color: var(--card-border);
-    }
-    .form-control {
-      background-color: var(--input-bg);
-      color: var(--input-fg);
-      border-color: var(--input-border);
-    }
-    .form-control::placeholder { color: var(--placeholder); }
-    .table { color: inherit; }
-    .table-responsive { overflow-x: auto; }
-    .card-header { font-weight: 700; }
+    .card { border-radius: 10px; }
+    body.dark .card { background-color: #1c1c1c; border-color: #444; }
+    body.dark .card-body { background-color: #1c1c1c; color: #f0f0f0; }
+    body.dark .card-header { background-color: #333 !important; color: #fff !important; }
 
-    /* Dark mode */
-    body.dark {
-      --bg: #121212;
-      --fg: #f0f0f0;
-      --card-bg: #1a1a1a;
-      --card-border: #333;
-      --input-bg: #1f1f1f;
-      --input-fg: #f0f0f0;
-      --input-border: #444;
-      --placeholder: #aaa;
-      --accent: #0aa8ff;
-    }
-    body.dark .table {
-      background-color: #1a1a1a;
-      border: 2px solid #b30000;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
-    }
-    body.dark .table th, body.dark .table td {
-      background-color: #1a1a1a;
-      border: 1px solid #b30000;
-      padding: 8px;
+    /* جدول سفارشات */
+    #ordersTable th, #ordersTable td { color: #000; }
+    body.dark #ordersTable { background-color: #1c1c1c !important; border-color: #444 !important; }
+    body.dark #ordersTable thead { background-color: #333 !important; }
+    body.dark #ordersTable tbody tr { background-color: #222 !important; }
+    body.dark #ordersTable tbody tr:hover { background-color: #2a2a2a !important; }
+    body.dark #ordersTable th, body.dark #ordersTable td {
+      border-color: #444 !important;
+      color: #f0f0f0 !important;
+      background-color: inherit !important;
     }
 
-    /* Device badges (visual cue, optional) */
-    body.android { border-top: 4px solid #2e7d32; } /* green */
-    body.ios { border-top: 4px solid #1565c0; }     /* blue */
-    body.desktop { border-top: 4px solid #6c757d; } /* gray */
+    .form-control { background-color: #fff; color: #000; }
+    body.dark .form-control { background-color: #222; color: #f0f0f0; border: 1px solid #555; }
 
-    /* Responsive layout */
-    /* Mobile */
-    @media (max-width: 767px) {
-      .card { width: 100%; margin: 0 auto 1rem; }
-      .form-control, .btn { font-size: 16px; }
-      .btn { width: 100%; }
-      .container { padding: 0 0.5rem; }
-    }
-    /* Tablet */
-    @media (min-width: 768px) and (max-width: 1024px) {
-      .card { width: 90%; margin: 0 auto 1rem; }
-      .form-control, .btn { font-size: 15px; }
-    }
-    /* Desktop */
-    @media (min-width: 1025px) {
-      .card { width: 900px; margin: 0 auto 1.25rem; }
-      .form-control, .btn { font-size: 14px; }
-    }
+    .is-invalid { border: 2px solid #dc3545 !important; background-color: #fff0f0 !important; }
+    body.dark .is-invalid { border: 2px solid #ff6b6b !important; background-color: #330000 !important; color: #fff !important; }
 
-    /* Device-specific tweaks */
-    body.android .btn-warning { font-size: 16px; }
-    body.desktop .btn-warning { font-size: 14px; }
-/* خط 51 */
-.error-field {
-  border: 2px solid red !important;
-  background-color: #ffe0e0;
-}
-/* حالت تاریک برای جدول سفارشات */
-body.dark .table {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
-  border: 2px solid #b30000;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
-}
-
-body.dark .table th,
-body.dark .table td {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
-  border: 1px solid #b30000;
-  padding: 8px;
-}
-  .error-field {
-    border: 2px solid red !important;
-    background-color: #ffe0e0;
-  }
-  .error-text {
-    color: #d32f2f;
-    font-size: 0.9rem;
-    margin-top: 4px;
-  }
-input.error-field,
-select.error-field,
-textarea.error-field {
-  border: 2px solid #d32f2f !important;
-  background-color: #fff0f0 !important;
-  color: #000 !important; /* متن مشکی برای خوانایی بالا */
-}
-
-/* حالت تاریک */
-@media (prefers-color-scheme: dark) {
-  input.error-field,
-  select.error-field,
-  textarea.error-field {
-    border: 2px solid #ff6b6b !important;
-    background-color: #3a0000 !important;
-    color: #fff !important; /* متن سفید برای تضاد با پس‌زمینه تیره */
-  }
-}
+    .text-success { color: #28a745 !important; font-weight: bold; }
   </style>
 </head>
-
 <body class="container py-4">
-  <!-- Header actions -->
+
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="m-0">سامانه وام‌دهی</h5>
+    <h5 id="mainTitle" class="m-0">سامانه وام‌دهی</h5>
     <div class="d-flex gap-2">
       <button id="toggleMode" class="btn btn-outline-secondary">تغییر حالت تاریک/روشن</button>
       <button id="systemMode" class="btn btn-outline-primary">همگام با سیستم</button>
+      <button id="langToggle" class="btn btn-secondary">English</button>
     </div>
   </div>
 
   <!-- Borrower -->
   <div class="card shadow mb-4">
-    <div class="card-header bg-primary text-white">وام‌گیرنده</div>
+    <div id="borrowerHeader" class="card-header bg-primary text-white">وام‌گیرنده</div>
     <div class="card-body">
       <form id="borrowerForm" class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">نام</label>
-          <input type="text" name="name" class="form-control" placeholder="مثال: علی رضایی" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">کیف پول</label>
-          <input type="text" name="wallet" class="form-control" placeholder="مثال: 0x..." required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">مبلغ وام</label>
-          <input type="number" name="amount" class="form-control" placeholder="مثال: 1000" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">نوع وثیقه</label>
-          <input type="text" name="collateralType" class="form-control" placeholder="مثال: BTC / ETH / USDT" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">ارزش وثیقه</label>
-          <input type="number" name="collateralValue" class="form-control" placeholder="مثال: 1200" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">مدت وام (ماه)</label>
-          <input type="number" name="duration" class="form-control" placeholder="مثال: 6" />
-        </div>
-        <div class="col-12">
-          <button type="button" class="btn btn-primary"
-            onclick="submitForm('borrowerForm','/api/borrower','borrowerResult')">
-            ثبت درخواست وام
-          </button>
-        </div>
+        <div class="col-md-6"><label class="form-label">نام</label><input type="text" name="name" class="form-control" placeholder="مثال: علی رضایی"></div>
+        <div class="col-md-6"><label class="form-label">آدرس کیف پول</label><input type="text" name="wallet" class="form-control" placeholder="مثال: EQC..."></div>
+        <div class="col-md-6"><label class="form-label">مبلغ وام</label><input type="number" name="amount" class="form-control" placeholder="مثال: 1000"></div>
+        <div class="col-md-6"><label class="form-label">مدت وام (ماه)</label><input type="number" name="duration" class="form-control" placeholder="مثال: 6"></div>
+        <div class="col-12"><button type="submit" class="btn btn-primary">ثبت درخواست وام</button></div>
       </form>
       <div id="borrowerResult" class="mt-3"></div>
     </div>
@@ -206,446 +67,220 @@ textarea.error-field {
 
   <!-- Lender -->
   <div class="card shadow mb-4">
-    <div class="card-header bg-success text-white">وام‌دهنده</div>
+    <div id="lenderHeader" class="card-header bg-success text-white">وام‌دهنده</div>
     <div class="card-body">
       <form id="lenderForm" class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">نام</label>
-          <input type="text" name="name" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">کیف پول</label>
-          <input type="text" name="wallet" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">مبلغ</label>
-          <input type="number" name="amount" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">مدت</label>
-          <input type="number" name="duration" class="form-control" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">بهره</label>
-          <input type="number" name="interest" class="form-control" />
-        </div>
-        <div class="col-12">
-          <button type="button" class="btn btn-success"
-            onclick="submitForm('lenderForm','/api/lender','lenderResult')">
-            ثبت پیشنهاد وام
-          </button>
-        </div>
+        <div class="col-md-6"><label class="form-label">نام</label><input type="text" name="name" class="form-control" placeholder="مثال: محمد کریمی"></div>
+        <div class="col-md-6"><label class="form-label">آدرس کیف پول</label><input type="text" name="wallet" class="form-control" placeholder="مثال: EQC..."></div>
+        <div class="col-md-6"><label class="form-label">مبلغ</label><input type="number" name="amount" class="form-control" placeholder="مثال: 5000"></div>
+        <div class="col-md-6"><label class="form-label">مدت (ماه)</label><input type="number" name="duration" class="form-control" placeholder="مثال: 12"></div>
+        <div class="col-md-6"><label class="form-label">بهره (%)</label><input type="number" name="interest" class="form-control" placeholder="مثال: 10"></div>
+        <div class="col-12"><button type="submit" class="btn btn-success">ثبت پیشنهاد وام</button></div>
       </form>
       <div id="lenderResult" class="mt-3"></div>
+    </div>
+  </div>
 
-      <!-- Orders -->
-      <div class="card shadow mt-4">
-        <div class="card-header bg-warning">📋 سفارشات ثبت‌شده</div>
-        <div class="card-body">
-          <button onclick="showOrders()" class="btn btn-warning mb-3">نمایش سفارشات</button>
-          <div id="ordersList" class="table-responsive"></div>
-        </div>
+  <!-- Orders Table -->
+  <div class="card shadow mb-4">
+    <div id="ordersHeader" class="card-header bg-dark text-white">لیست سفارشات</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="ordersTable" class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>نوع</th><th>نام</th><th>کیف پول</th><th>مبلغ</th><th>مدت (ماه)</th><th>بهره (%)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <script>
-    // Device detection and mode handling
-    function detectDevice() {
-      const ua = navigator.userAgent.toLowerCase();
-
-      // Device classes
-      if (ua.includes('android')) {
-        document.body.classList.add('android');
-      } else if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ipod')) {
-        document.body.classList.add('ios');
-      } else if (ua.includes('mobile')) {
-        // Fallback for mobile-only UA strings
-        document.body.classList.add('android');
-      } else {
-        document.body.classList.add('desktop');
-      }
-
-      // Optional: auto-dark on mobile devices
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isMobile = document.body.classList.contains('android') || document.body.classList.contains('ios');
-      if (isMobile && prefersDark) {
-        document.body.classList.add('dark');
-      }
-    }
-
-    // System theme sync
-    function applySystemTheme() {
-      if (!window.matchMedia) return;
-      const mq = window.matchMedia('(prefers-color-scheme: dark)');
-      const apply = () => {
-        // Only change if "system sync" is active
-        if (localStorage.getItem('theme') === 'system') {
-          document.body.classList.toggle('dark', mq.matches);
-        }
-      };
-      mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply);
-      apply();
-    }
-
-    // Manual toggle
-    function bindThemeControls() {
-      const toggleBtn = document.getElementById('toggleMode');
-      const systemBtn = document.getElementById('systemMode');
-
-      toggleBtn.addEventListener('click', () => {
-        const newDark = !document.body.classList.contains('dark');
-        document.body.classList.toggle('dark', newDark);
-        localStorage.setItem('theme', newDark ? 'dark' : 'light');
+    function markEmptyFields(form) {
+      const inputs = form.querySelectorAll("input, select, textarea");
+      let allFilled = true;
+      inputs.forEach(input => {
+        const value = (input.value || "").trim();
+        if (!value) { input.classList.add("is-invalid"); allFilled = false; }
+        else { input.classList.remove("is-invalid"); }
       });
-
-      systemBtn.addEventListener('click', () => {
-        localStorage.setItem('theme', 'system');
-        applySystemTheme();
-      });
-
-      // Load persisted preference
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark') document.body.classList.add('dark');
-      else if (saved === 'light') document.body.classList.remove('dark');
-      else if (saved === 'system') applySystemTheme();
+      return allFilled;
     }
 
-    // Submit form helper
-    async function submitForm(formId, apiUrl, resultId) {
+    function handleSubmit(formId, resultId, typeLabelFa, typeLabelEn) {
       const form = document.getElementById(formId);
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      const resultBox = document.getElementById(resultId);
+      const allFilled = markEmptyFields(form);
+      if (!allFilled) { resultBox.innerHTML = ""; return; }
 
-      try {
-        const res = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('Server error');
+      const langBtn = document.getElementById("langToggle");
+      const isFa = langBtn.innerText === "English";
+      resultBox.innerHTML = isFa
+        ? '<div class="text-success">سفارش شما با موفقیت ثبت شد ✅</div>'
+        : '<div class="text-success">Your order has been submitted successfully ✅</div>';
 
-        const result = await res.json();
-        document.getElementById(resultId).innerHTML =
-          `<div class="alert alert-success">درخواست ثبت شد ✅</div>`;
-        form.reset();
-      } catch (err) {
-        document.getElementById(resultId).innerHTML =
-          `<div class="alert alert-danger">خطا در ثبت درخواست ❌</div>`;
-      }
+      const data = Object.fromEntries(new FormData(form).entries());
+      const tbody = document.querySelector("#ordersTable tbody");
+      const row = tbody.insertRow();
+      const typeLabel = isFa ? typeLabelFa : typeLabelEn;
+
+      row.innerHTML = `
+        <td>${typeLabel}</td>
+        <td>${data.name || "-"}</td>
+        <td>${data.wallet || "-"}</td>
+        <td>${data.amount || "-"}</td>
+        <td>${data.duration || "-"}</td>
+        <td>${data.interest || (formId === "borrowerForm" ? "" : "-")}</td>
+      `;
+
+      form.reset();
     }
 
-    // Fetch and render orders
-    async function showOrders() {
-      try {
-        const res = await fetch('/api/orders');
-        if (!res.ok) throw new Error('Server error');
-        const orders = await res.json();
+    function setupForm(formId, resultId, typeLabelFa, typeLabelEn) {
+      const form = document.getElementById(formId);
+      form.addEventListener("input", () => markEmptyFields(form));
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleSubmit(formId, resultId, typeLabelFa, typeLabelEn);
+      });
+    }
 
-        if (!orders.length) {
-          document.getElementById('ordersList').innerHTML =
-            `<div class="alert alert-info">هیچ سفارشی ثبت نشده است</div>`;
-          return;
+    function updateOrdersTableLanguage(isEnglish) {
+      const headers = document.querySelectorAll("#ordersTable thead th");
+      if (isEnglish) {
+        headers[0].innerText = "Type";
+        headers[1].innerText = "Name";
+        headers[2].innerText = "Wallet";
+        headers[3].innerText = "Amount";
+        headers[4].innerText = "Duration (Months)";
+        headers[5].innerText = "Interest (%)";
+      } else {
+        headers[0].innerText = "نوع";
+        headers[1].innerText = "نام";
+        headers[2].innerText = "کیف پول";
+        headers[3].innerText = "مبلغ";
+        headers[4].innerText = "مدت (ماه)";
+        headers[5].innerText = "بهره (%)";
+      }
+
+      // تغییر ردیف‌های قبلی
+      document.querySelectorAll("#ordersTable tbody tr").forEach(row => {
+        const typeCell = row.cells[0];
+        if (isEnglish) {
+          if (typeCell.innerText === "وام‌گیرنده") typeCell.innerText = "Borrower";
+          if (typeCell.innerText === "وام‌دهنده") typeCell.innerText = "Lender";
+        } else {
+          if (typeCell.innerText === "Borrower") typeCell.innerText = "وام‌گیرنده";
+          if (typeCell.innerText === "Lender") typeCell.innerText = "وام‌دهنده";
         }
-
-        const table = `
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>شناسه</th>
-                <th>نوع</th>
-                <th>نام</th>
-                <th>کیف پول</th>
-                <th>مبلغ</th>
-                <th>نوع وثیقه</th>
-                <th>ارزش وثیقه</th>
-                <th>مدت</th>
-                <th>بهره</th>
-                <th>کارمزد</th>
-                <th>مجموع</th>
-                <th>تاریخ</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${orders.map(o => `
-                <tr>
-                  <td>${o.id}</td>
-                  <td>${o.type || '-'}</td>
-                  <td>${o.name || '-'}</td>
-                  <td>${o.wallet || '-'}</td>
-                  <td>${o.amount ?? '-'}</td>
-                  <td>${o.collateralType || '-'}</td>
-                  <td>${o.collateralValue ?? '-'}</td>
-                  <td>${o.duration ?? '-'}</td>
-                  <td>${o.interest ?? '-'}</td>
-                  <td>${o.feeAmount ?? '-'}</td>
-                  <td>${o.total ?? '-'}</td>
-                  <td>${o.date}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        `;
-        document.getElementById('ordersList').innerHTML = table;
-      } catch (err) {
-        document.getElementById('ordersList').innerHTML =
-          `<div class="alert alert-danger">خطا در دریافت سفارشات ❌</div>`;
-      }
+      });
     }
 
-    // Init
-    detectDevice();
-    bindThemeControls();
-  async function submitForm(formId, apiUrl, resultId) {
-    const form = document.getElementById(formId);
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    // پاک کردن خطاهای قبلی
-    form.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
-
-    // اعتبارسنجی جداگانه برای هر فرم
-    let requiredFields = [];
-
-    if (formId === 'borrowerForm') {
-      requiredFields = ['name', 'wallet', 'amount', 'collateralType', 'collateralValue', 'duration'];
-    } else if (formId === 'lenderForm') {
-      requiredFields = ['name', 'wallet', 'amount', 'duration', 'interest'];
-    }
-
-    const missing = requiredFields.filter(field => !data[field] || data[field].trim() === '');
-
-    if (missing.length > 0) {
-      // رنگ قرمز برای فیلدهای خالی
-      missing.forEach(field => {
-        const input = form.querySelector(`[name="${field}"]`);
-        if (input) input.classList.add('error-field');
+    document.addEventListener("DOMContentLoaded", () => {
+      // دکمه تاریک/روشن
+      document.getElementById("toggleMode").addEventListener("click", () => {
+        document.body.classList.toggle("dark");
       });
 
-      document.getElementById(resultId).innerHTML =
-        `<div class="alert alert-warning">لطفاً همه فیلدهای ضروری را کامل کنید ❗</div>`;
-      return;
-    }
-
-    try {
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+      // دکمه همگام با سیستم
+      document.getElementById("systemMode").addEventListener("click", () => {
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          document.body.classList.add("dark");
+        } else {
+          document.body.classList.remove("dark");
+        }
       });
-      if (!res.ok) throw new Error('Server error');
-      const result = await res.json();
-      document.getElementById(resultId).innerHTML =
-        `<div class="alert alert-success">درخواست ثبت شد ✅</div>`;
-      form.reset();
-    } catch (err) {
-      document.getElementById(resultId).innerHTML =
-        `<div class="alert alert-danger">خطا در ثبت درخواست ❌</div>`;
-    }
-  }
-  // الگوها و محدودیت‌ها
-  const patterns = {
-    walletEth: /^0x[a-fA-F0-9]{40}$/, // آدرس اتریوم
-    name: /^[\u0600-\u06FFa-zA-Z\s]{2,50}$/, // فارسی/لاتین + فاصله
-  };
 
-  const limits = {
-    amount: { min: 1, max: 1000000 },
-    collateralValue: { min: 1, max: 10000000 },
-    duration: { min: 1, max: 60 },
-    interest: { min: 0, max: 100 } // اگر در فرم وام‌دهنده داری
-  };
+      // تغییر زبان
+      document.getElementById("langToggle").addEventListener("click", () => {
+        const langBtn = document.getElementById("langToggle");
+        const mainTitle = document.getElementById("mainTitle");
 
-  const allowedCollateral = ['BTC', 'ETH', 'USDT'];
+        const borrowerLabels = document.querySelectorAll("#borrowerForm .form-label");
+        const borrowerInputs = document.querySelectorAll("#borrowerForm .form-control");
 
-  function setError(input, message) {
-    input.classList.add('error-field');
-    const helpId = input.getAttribute('aria-describedby');
-    if (helpId) {
-      const helpEl = document.getElementById(helpId);
-      if (helpEl) {
-        helpEl.textContent = message;
-        helpEl.classList.add('error-text');
-      }
-    }
-  }
+        const lenderLabels = document.querySelectorAll("#lenderForm .form-label");
+        const lenderInputs = document.querySelectorAll("#lenderForm .form-control");
 
-  function clearError(input) {
-    input.classList.remove('error-field');
-    const helpId = input.getAttribute('aria-describedby');
-    if (helpId) {
-      const helpEl = document.getElementById(helpId);
-      if (helpEl) {
-        helpEl.textContent = '';
-        helpEl.classList.remove('error-text');
-      }
-    }
-  }
+        const switchingToEnglish = (langBtn.innerText === "English");
 
-  function validateBorrower(data, form) {
-    let ok = true;
+        if (switchingToEnglish) {
+          langBtn.innerText = "فارسی";
+          mainTitle.innerText = "Loan System";
 
-    // name
-    {
-      const input = form.querySelector('[name="name"]');
-      clearError(input);
-      if (!data.name || !patterns.name.test(data.name.trim())) {
-        setError(input, 'نام باید فقط شامل حروف فارسی/لاتین و فاصله باشد (۲ تا ۵۰ کاراکتر).');
-        ok = false;
-      }
-    }
+          document.getElementById("borrowerHeader").innerText = "Borrower";
+          document.getElementById("lenderHeader").innerText = "Lender";
+          document.getElementById("ordersHeader").innerText = "Orders List";
 
-    // wallet (Ethereum)
-    {
-      const input = form.querySelector('[name="wallet"]');
-      clearError(input);
-      if (!data.wallet || !patterns.walletEth.test(data.wallet.trim())) {
-        setError(input, 'آدرس کیف پول معتبر اتریوم وارد کنید (0x + 40 کاراکتر هگز).');
-        ok = false;
-      }
-    }
+          document.querySelector("#borrowerForm button").innerText = "Submit Loan Request";
+          document.querySelector("#lenderForm button").innerText = "Submit Loan Offer";
 
-    // amount
-    {
-      const input = form.querySelector('[name="amount"]');
-      clearError(input);
-      const v = Number(data.amount);
-      if (!Number.isFinite(v) || v < limits.amount.min || v > limits.amount.max) {
-        setError(input, `مبلغ باید عددی بین ${limits.amount.min} تا ${limits.amount.max} باشد.`);
-        ok = false;
-      }
-    }
+          borrowerLabels[0].innerText = "Name";
+          borrowerLabels[1].innerText = "Wallet address";
+          borrowerLabels[2].innerText = "Loan Amount";
+          borrowerLabels[3].innerText = "Loan Duration (Months)";
+          borrowerInputs[0].placeholder = "e.g. Ali Rezaei";
+          borrowerInputs[1].placeholder = "e.g. EQC...";
+          borrowerInputs[2].placeholder = "e.g. 1000";
+          borrowerInputs[3].placeholder = "e.g. 6";
 
-    // collateralType
-    {
-      const input = form.querySelector('[name="collateralType"]');
-      clearError(input);
-      const t = (data.collateralType || '').trim().toUpperCase();
-      if (!allowedCollateral.includes(t)) {
-        setError(input, `نوع وثیقه باید یکی از این‌ها باشد: ${allowedCollateral.join(' / ')}.`);
-        ok = false;
-      }
-    }
+          lenderLabels[0].innerText = "Name";
+          lenderLabels[1].innerText = "Wallet address";
+          lenderLabels[2].innerText = "Amount";
+          lenderLabels[3].innerText = "Duration (Months)";
+          lenderLabels[4].innerText = "Interest (%)";
+          lenderInputs[0].placeholder = "e.g. Mohammad Karimi";
+          lenderInputs[1].placeholder = "e.g. EQC...";
+          lenderInputs[2].placeholder = "e.g. 5000";
+          lenderInputs[3].placeholder = "e.g. 12";
+          lenderInputs[4].placeholder = "e.g. 10";
 
-    // collateralValue
-    {
-      const input = form.querySelector('[name="collateralValue"]');
-      clearError(input);
-      const v = Number(data.collateralValue);
-      if (!Number.isFinite(v) || v < limits.collateralValue.min || v > limits.collateralValue.max) {
-        setError(input, `ارزش وثیقه باید عددی بین ${limits.collateralValue.min} تا ${limits.collateralValue.max} باشد.`);
-        ok = false;
-      }
-    }
+          updateOrdersTableLanguage(true);
 
-    // duration
-    {
-      const input = form.querySelector('[name="duration"]');
-      clearError(input);
-      const v = Number(data.duration);
-      if (!Number.isInteger(v) || v < limits.duration.min || v > limits.duration.max) {
-        setError(input, `مدت وام باید عدد صحیح بین ${limits.duration.min} تا ${limits.duration.max} ماه باشد.`);
-        ok = false;
-      }
-    }
+        } else {
+          langBtn.innerText = "English";
+          mainTitle.innerText = "سامانه وام‌دهی";
 
-    return ok;
-  }
+          document.getElementById("borrowerHeader").innerText = "وام‌گیرنده";
+          document.getElementById("lenderHeader").innerText = "وام‌دهنده";
+          document.getElementById("ordersHeader").innerText = "لیست سفارشات";
 
-  function validateLender(data, form) {
-    let ok = true;
+          document.querySelector("#borrowerForm button").innerText = "ثبت درخواست وام";
+          document.querySelector("#lenderForm button").innerText = "ثبت پیشنهاد وام";
 
-    // name
-    {
-      const input = form.querySelector('[name="name"]');
-      clearError(input);
-      if (!data.name || !patterns.name.test(data.name.trim())) {
-        setError(input, 'نام باید فقط شامل حروف فارسی/لاتین و فاصله باشد (۲ تا ۵۰ کاراکتر).');
-        ok = false;
-      }
-    }
+          borrowerLabels[0].innerText = "نام";
+          borrowerLabels[1].innerText = "آدرس کیف پول";
+          borrowerLabels[2].innerText = "مبلغ وام";
+          borrowerLabels[3].innerText = "مدت وام (ماه)";
+          borrowerInputs[0].placeholder = "مثال: علی رضایی";
+          borrowerInputs[1].placeholder = "مثال: EQC...";
+          borrowerInputs[2].placeholder = "مثال: 1000";
+          borrowerInputs[3].placeholder = "مثال: 6";
 
-    // wallet (Ethereum)
-    {
-      const input = form.querySelector('[name="wallet"]');
-      clearError(input);
-      if (!data.wallet || !patterns.walletEth.test(data.wallet.trim())) {
-        setError(input, 'آدرس کیف پول معتبر اتریوم وارد کنید (0x + 40 کاراکتر هگز).');
-        ok = false;
-      }
-    }
+          lenderLabels[0].innerText = "نام";
+          lenderLabels[1].innerText = "آدرس کیف پول";
+          lenderLabels[2].innerText = "مبلغ";
+          lenderLabels[3].innerText = "مدت (ماه)";
+          lenderLabels[4].innerText = "بهره (%)";
+          lenderInputs[0].placeholder = "مثال: محمد کریمی";
+          lenderInputs[1].placeholder = "مثال: EQC...";
+          lenderInputs[2].placeholder = "مثال: 5000";
+          lenderInputs[3].placeholder = "مثال: 12";
+          lenderInputs[4].placeholder = "مثال: 10";
 
-    // amount
-    {
-      const input = form.querySelector('[name="amount"]');
-      clearError(input);
-      const v = Number(data.amount);
-      if (!Number.isFinite(v) || v < limits.amount.min || v > limits.amount.max) {
-        setError(input, `مبلغ باید عددی بین ${limits.amount.min} تا ${limits.amount.max} باشد.`);
-        ok = false;
-      }
-    }
-
-    // duration
-    {
-      const input = form.querySelector('[name="duration"]');
-      clearError(input);
-      const v = Number(data.duration);
-      if (!Number.isInteger(v) || v < limits.duration.min || v > limits.duration.max) {
-        setError(input, `مدت باید عدد صحیح بین ${limits.duration.min} تا ${limits.duration.max} ماه باشد.`);
-        ok = false;
-      }
-    }
-
-    // interest (درصد)
-    {
-      const input = form.querySelector('[name="interest"]');
-      clearError(input);
-      const v = Number(data.interest);
-      if (!Number.isFinite(v) || v < limits.interest.min || v > limits.interest.max) {
-        setError(input, `نرخ بهره باید بین ${limits.interest.min}% تا ${limits.interest.max}% باشد.`);
-        ok = false;
-      }
-    }
-
-    return ok;
-  }
-
-  async function submitForm(formId, apiUrl, resultId) {
-    const form = document.getElementById(formId);
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    // پاک کردن خطاهای قبلی همه فیلدها
-    form.querySelectorAll('input, select, textarea').forEach(clearError);
-
-    // اعتبارسنجی اختصاصی
-    const valid = formId === 'borrowerForm'
-      ? validateBorrower(data, form)
-      : validateLender(data, form);
-
-    if (!valid) {
-      document.getElementById(resultId).innerHTML =
-        `<div class="alert alert-warning">لطفاً خطاهای مشخص‌شده را برطرف کنید و دوباره تلاش کنید ❗</div>`;
-      return;
-    }
-
-    try {
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+          updateOrdersTableLanguage(false);
+        }
       });
-      if (!res.ok) throw new Error('Server error');
-      const result = await res.json();
-      document.getElementById(resultId).innerHTML =
-        `<div class="alert alert-success">درخواست ثبت شد ✅</div>`;
-      form.reset();
-    } catch (err) {
-      document.getElementById(resultId).innerHTML =
-        `<div class="alert alert-danger">خطا در ثبت درخواست ❌</div>`;
-    }
-  }
+
+      // اتصال فرم‌ها
+      setupForm("borrowerForm", "borrowerResult", "وام‌گیرنده", "Borrower");
+      setupForm("lenderForm", "lenderResult", "وام‌دهنده", "Lender");
+    });
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
