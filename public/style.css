@@ -1,0 +1,27 @@
+body { font-family: Vazir, sans-serif; background-color: #f8f9fa; color: #222; }
+body.dark { background-color: #000; color: #f0f0f0; }
+
+.card { border-radius: 10px; }
+body.dark .card { background-color: #1c1c1c; border-color: #444; }
+body.dark .card-body { background-color: #1c1c1c; color: #f0f0f0; }
+body.dark .card-header { background-color: #333 !important; color: #fff !important; }
+
+/* جدول سفارشات */
+#ordersTable th, #ordersTable td { color: #000; }
+body.dark #ordersTable { background-color: #1c1c1c !important; border-color: #444 !important; }
+body.dark #ordersTable thead { background-color: #333 !important; }
+body.dark #ordersTable tbody tr { background-color: #222 !important; }
+body.dark #ordersTable tbody tr:hover { background-color: #2a2a2a !important; }
+body.dark #ordersTable th, body.dark #ordersTable td {
+  border-color: #444 !important;
+  color: #f0f0f0 !important;
+  background-color: inherit !important;
+}
+
+.form-control { background-color: #fff; color: #000; }
+body.dark .form-control { background-color: #222; color: #f0f0f0; border: 1px solid #555; }
+
+.is-invalid { border: 2px solid #dc3545 !important; background-color: #fff0f0 !important; }
+body.dark .is-invalid { border: 2px solid #ff6b6b !important; background-color: #330000 !important; color: #fff !important; }
+
+.text-success { color: #28a745 !important; font-weight: bold; }
